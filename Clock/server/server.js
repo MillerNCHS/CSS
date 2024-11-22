@@ -206,9 +206,14 @@ async function updateClient(ws, room) // send information to an individual clien
     ws.send(JSON.stringify({schedule:scheduleMap[room], layout:tempLayout, weather:weather}));
 }
 
+wss.on('upgrade', (req, ws, head) => {
+    console.log('UPGRADE');
+});
+
 // runs when a new client connects
 wss.on('connection', (ws) => 
 {
+    console.log("Hit the server...");
     var firstMessageRecieved = false;
     var room = null;
 

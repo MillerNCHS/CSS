@@ -32,11 +32,11 @@ function App() {
 
     
     // Deal with WebSocket stuff. should run only once at the start
-    useEffect(() =>
+    /*useEffect(() =>
     {
         const portNum = 8000; // Change this number in order to change which port the server is listening on
-        //const serverUrl = 'wss://clock.redhawks.us:' + portNum; // may need to change this if we host the server on a different url
-        const serverUrl = 'ws://localhost:' + portNum;
+        const serverUrl = 'wss://clock.redhawks.us:' + portNum; // may need to change this if we host the server on a different url
+        //const serverUrl = 'ws://localhost:' + portNum;
 
         const ws = new WebSocket(serverUrl); // represents the client socket
 
@@ -60,6 +60,49 @@ function App() {
         });
 
         return () => {ws.close();};
+    }, [room]);*/
+
+    useEffect(() => {
+        const portNum = 8000; // Change this number in order to change which port the server is listening on
+        const serverUrl = 'wss://' + window.location.hostname + ':' + portNum;
+        let ws = null; // represents the client socket
+    
+        const connectWebSocket = () => {
+            if (ws === null || ws.readyState === WebSocket.CLOSED) {
+                ws = new WebSocket(serverUrl); // make a new WebSocket connection
+    
+                // send the server the room number
+                ws.addEventListener("open", () => {
+                    ws.send(room);
+                });
+    
+                // receive messages from the server
+                ws.addEventListener("message", (e) => {
+                    const data = JSON.parse(e.data);
+                    setSchedule(data.schedule);
+                    setSiteLayout(data.layout.site);
+                    setWidgetList(data.layout.widgetList);
+                    setWeather(data.weather);
+                });
+    
+                // Optionally handle errors
+                ws.addEventListener("error", (error) => {
+                    console.error("WebSocket error:", error);
+                });
+            }
+        };
+    
+        // Run the WebSocket connection logic immediately
+        connectWebSocket();
+    
+        // Set up the interval to reconnect every 10 minutes
+        const interval = setInterval(connectWebSocket, 600000);
+    
+        // Cleanup on unmount
+        return () => {
+            clearInterval(interval);
+            if (ws) ws.close();
+        };
     }, [room]);
 
     useEffect(() => 

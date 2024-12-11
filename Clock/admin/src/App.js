@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useState } from 'react';
+import React from 'react';
 
 import Sidebar from './components/Sidebar';
 import PreviewPage from './pages/PreviewPage';

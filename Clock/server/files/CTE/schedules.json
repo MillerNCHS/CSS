@@ -2,8 +2,8 @@
   "SOAR": [
     { "name": "Period 1", "start": "07:45", "end": "08:30" },
     { "name": "Period 2", "start": "08:35", "end": "09:20" },
-    { "name": "SOAR", "start": "09:25", "end": "10:20" },
-    { "name": "Period 3", "start": "10:21", "end": "11:00" },
+    { "name": "SOAR", "start": "09:25", "end": "10:10" },
+    { "name": "Period 3", "start": "10:15", "end": "11:00" },
     { "name": "Period 4", "start": "11:05", "end": "11:50" },
     { "name": "Period 5", "start": "11:55", "end": "12:40" },
     { "name": "Period 6", "start": "12:45", "end": "13:30" },

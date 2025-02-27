@@ -15,7 +15,7 @@ function SchedulesPage()
 
     const [overlay, setOverlay] = useState(false);
 
-    const [schedules, setSchedules] = useState({}); // All the schedules (initially recieved from the server)
+    const [schedules, setSchedules] = useState({}); // All the schedules (initially received from the server)
     const [selection, setSelection] = useState(null); // The name of the schedule currently being modified (or a new empty schedule)
 
     const [tempScheduleName, setTempScheduleName] = useState(""); // The name of the schedule can be set by the user if it is a new schedule
@@ -24,8 +24,8 @@ function SchedulesPage()
     const [IDs, setIDs] = useState(new Set());
     const [nextID, setNextID] = useState(0);
 
-    const baseURL = "http://"+window.location.hostname+":8500/"; // This will likly need to be changed for a production build
-
+    //const baseURL = "http://"+window.location.hostname+":8500/"; // This will likely need to be changed for a production build
+    const baseURL = "https://clock.redhawks.us:8000/";
 
     // TODO: and authorization header can be used to make sure that this user has admin credentials
     function updateServerSchedules(info) // Sends the schedules to the server 

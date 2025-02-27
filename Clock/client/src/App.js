@@ -30,8 +30,7 @@ function App() {
 
     const [displayList, setDisplayList] = useState([]);
 
-    
-    // Deal with WebSocket stuff. should run only once at the start
+// Deal with WebSocket stuff. should run only once at the start
     /*useEffect(() =>
     {
         const portNum = 8000; // Change this number in order to change which port the server is listening on
@@ -64,7 +63,7 @@ function App() {
 
     useEffect(() => {
         const portNum = 8000; // Change this number in order to change which port the server is listening on
-        const serverUrl = 'wss://' + window.location.hostname + ':' + portNum;
+        const serverUrl = 'ws://' + window.location.hostname + ':' + portNum;
         let ws = null; // represents the client socket
     
         const connectWebSocket = () => {
@@ -104,6 +103,8 @@ function App() {
             if (ws) ws.close();
         };
     }, [room]);
+
+    //useWebSocket(room, setSchedule, setSiteLayout, setWidgetList, setWeather);
 
     useEffect(() => 
     {

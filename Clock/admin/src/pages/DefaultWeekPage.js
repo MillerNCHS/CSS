@@ -13,8 +13,8 @@ function DefaultWeekPage()
     const [defaultWeek, setDefaultWeek] = useState({}); // the current default-week (initially recieved from the server)
     const [schedules, setSchedules] = useState({});
   
-    const baseURL = "http://"+window.location.hostname+":8500/"; // This will likely need to be changed for a production build
-
+    //const baseURL = "http://"+window.location.hostname+":8500/"; // This will likely need to be changed for a production build
+    const baseURL = "https://clock.redhawks.us:8000/";
 
     // TODO: and authorization header can be used to make sure that this user has admin credentials
     function updateServerDefaultWeek(info) // Sends the schedules to the server 

@@ -55,7 +55,7 @@ function App() {
     setMode((mode === "light") ? "dark" : "light");
   }
 
-  // the routing to the svarious pages
+  // the routing to the various pages
   return (
     <ThemeProvider theme={mode === "light" ? lightTheme : darkTheme}>
       <CssBaseline />

@@ -20,8 +20,8 @@ function CalendarPage()
 
 
     const today = new Date(); // todays date/time info
-    const baseURL = "http://"+window.location.hostname+":8500/"; // This will likely need to be changed for a production build
-
+    //const baseURL = "http://"+window.location.hostname+":8500/"; // This will likely need to be changed for a production build
+    const baseURL = "https://clock.redhawks.us:8000/";
 
     // TODO: and authorization header can be used to make sure that this user has admin credentials
     function updateServerCalendar(info) // Sends the calendar to the server 
@@ -37,13 +37,13 @@ function CalendarPage()
     }
 
 
-    // The displayed calendar should initialy show today's month and have today's date selected
+    // The displayed calendar should initially show today's month and have today's date selected
     useEffect(() =>
     {
         resetToToday();
     }, []);
 
-    // brings the calendar UI back to today's month with taday's date selected
+    // brings the calendar UI back to today's month with today's date selected
     function resetToToday()
     {
         setTableMonth(today.getMonth());

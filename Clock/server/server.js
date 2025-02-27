@@ -1,10 +1,7 @@
 // ----- Imports & Initializations
-
-
 const WebSocket = require("ws"); // import websockets
 const FileSystem = require("fs"); // import filesystem
 const Scheduler = require("node-schedule");
-const { createProxyMiddleware } = require('http-proxy-middleware');
 const express = require('express');
 const cors = require('cors');
 const { error } = require("console");
@@ -32,7 +29,7 @@ con.connect(function(err) {
   console.log("Connected to sql server!");
 });
 
-// ----- Oauth Managment -----
+// ----- Oauth Management -----
 
 
 function checkValid(userID, callback)
@@ -45,12 +42,12 @@ function checkValid(userID, callback)
 }
 
 
-// ----- File Managment -----
+// ----- File Management -----
 
 
 function checkRoom(room) // check to make sure that a 'room' directory contains the needed files
 {
-    // make sure that all of the important files storeing the Schedules, Calendar, etc. exist
+    // make sure that all of the important files storing the Schedules, Calendar, etc. exist
     if (FileSystem.existsSync("files/" + room + "/schedules.json") === false) // create an empty dictionary of all schedules
     {
         const data = {};
@@ -86,8 +83,56 @@ for (const i in FileSystem.readdirSync("files")) // go through every file repres
 
 function getCurrentSchedule(room, callback)
 {    
-    // figure out todays schedule
+    // figure out today's schedule
+    /*
+    schedule = [];
+    con.query("SELECT Calendar.scheduleID FROM nchs_css.Calendar JOIN nchs_css.Room ON Calendar.roomID = Room.id WHERE Calendar.date = CURDATE() AND Room.name = ? LIMIT 1;", [room], function(err, result, fields) {
+        if (err) {callback(err, null); return;}
+        if (result.length !== 0) {
+            con.query("SELECT * FROM nchs_css.Schedule WHERE scheduleID = ?;", [result[0]['scheduleID']], function(err, innerResult, fields) {
+                if (err) {callback(err, null); return;}
+                schedule = innerResult.map(({ name, start, end }) => ({ name, start, end }));
+                callback(schedule, null);
+            });
+        }
+    });
+    
+    if (schedule == []) {
+        con.query("SELECT Room.id FROM nchs_css.Room WHERE Room.name = ? LIMIT 1;", [room], function(err, result, fields) {
+            if (err) {callback(err, null); return;}
+            
+            // Get current day of the week (Monday, Tuesday, etc) and create a query select that day from the Week table
+            const currentDay = new Date().toLocaleString("en-US", { weekday: "long" });
+            const weekQuery = `SELECT ?? AS scheduleID FROM nchs_css.Week WHERE roomID = ?;`;
+            
+            con.query(weekQuery, [currentDay, roomID], function (err, result) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+        
+                if (result.length === 0 || !result[0].scheduleID) {
+                    callback(null, []); // No schedule found for today
+                    return;
+                }
+            
+                const scheduleID = result[0].scheduleID;
 
+                // Query to get the schedule details from the Schedule table
+                const scheduleQuery = "SELECT name, start, end FROM nchs_css.Schedule WHERE scheduleID = ?;";
+
+                con.query(scheduleQuery, [scheduleID], function (err, scheduleResult) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+
+                    callback(null, scheduleResult); // Return the schedule data
+                });
+            });   
+        });
+    }
+    */
     const calendar = JSON.parse(FileSystem.readFileSync("files/" + room + "/calendar.json"));
     const schedules = JSON.parse(FileSystem.readFileSync("files/" + room + "/schedules.json"));
 
@@ -116,6 +161,7 @@ function getCurrentSchedule(room, callback)
 
     // if yesterday's schedule was a special one time schedule, delete it
     // get yesterday's date info
+    // Not necessary after moving to database
     tempDate.setDate(tempDate.getDate() - 1);
     dateKey = tempDate.getMonth() * 100;
     dateKey += tempDate.getDate();
@@ -185,18 +231,22 @@ function getCurrentWeather(callback)
 getCurrentWeather();
 
 
-// ----- WebSocket Managment -----
+// ----- WebSocket Management -----
 
 
 const portNum = 8000; // Change this number in order to change which port the server is listening on
 const wss = new WebSocket.Server({port : portNum}); // represents the server socket
 
-async function broadcast(room) // send information to all connections
-{
-    if (roomConnections[room])
-    {
+async function broadcast(room) {
+    if (roomConnections[room]) {
         roomConnections[room].forEach(ws => {
-            updateClient(ws, room);
+            if (ws.readyState === WebSocket.OPEN) {
+                try {
+                    updateClient(ws, room);
+                } catch (err) {
+                    console.error(`Error broadcasting to client: ${err}`);
+                }
+            }
         });
     }
 }
@@ -206,60 +256,75 @@ async function updateClient(ws, room) // send information to an individual clien
     ws.send(JSON.stringify({schedule:scheduleMap[room], layout:tempLayout, weather:weather}));
 }
 
-wss.on('upgrade', (req, ws, head) => {
-    console.log('UPGRADE');
-});
+// Keep connection alive (Only set up once)
+wss.on('connection', (ws) => {
+    console.log('WebSocket connection established');
+    ws.isAlive = true;
+    
+    ws.on('pong', () => ws.isAlive = true);
 
-// runs when a new client connects
-wss.on('connection', (ws) => 
-{
-    console.log("Hit the server...");
-    var firstMessageRecieved = false;
-    var room = null;
+    const interval = setInterval(() => {
+        if (!ws.isAlive) {
+            clearInterval(interval); // Ensure interval stops when WebSocket is dead
+            return ws.terminate();
+        }
+        ws.isAlive = false;
+        ws.ping();
+    }, 30000);
 
-    // runs on client message
-    ws.on('message', (msg) =>
-    {
-        if (firstMessageRecieved) return;
-        firstMessageRecieved = true;
+    ws.on('close', () => {
+        clearInterval(interval); // Stop interval when WebSocket disconnects
+    });
 
-        // we expect the first message to specify the room number
-        try
-        {
-            room = msg.toString(); // the room of this client
-            if (scheduleMap[room] === undefined) // invalid room name
-            {
-                ws.send(JSON.stringify({schedule:[], layout:{"site":{"backgroundColor":"#ffaaaa"},"widgetList":[{"type":"textbox","row":1,"col":1,"width":14,"height":7,"config":{"backgroundColor":"#ffffff","textColor":"#000000","text":"\nInvalid Room Name.\nPlease press \"ESC\" on the keyboard\nto enter a room name.\n\n(The room name should coorespond with a\nroom name on the \"Room Select Page\"\nof the administrative site)\n"}}]}, weather:weather}));
+    let firstMessageReceived = false;
+    let room = null;
+
+    ws.on('message', (msg) => {
+        if (firstMessageReceived) return;
+        firstMessageReceived = true;
+
+        try {
+            room = msg.toString();
+            if (!scheduleMap[room]) {
+                ws.send(JSON.stringify({
+                    schedule: [],
+                    layout: {
+                        "site": { "backgroundColor": "#ffaaaa" },
+                        "widgetList": [{
+                            "type": "textbox",
+                            "row": 1, "col": 1, "width": 14, "height": 7,
+                            "config": { "backgroundColor": "#ffffff", "textColor": "#000000", "text": "\nInvalid Room Name.\nPlease press \"ESC\" on the keyboard\nto enter a room name.\n\n(The room name should correspond with a\nroom name on the \"Room Select Page\"\nof the administrative site)\n" }
+                        }]
+                    },
+                    weather: weather
+                }));
                 ws.terminate();
-            }
-            else
-            {
-                if (roomConnections[room] === undefined) // this is a room with no connections currently
-                {
+            } else {
+                if (!roomConnections[room]) {
                     roomConnections[room] = new Set();
                 }
-                roomConnections[room].add(ws); // add this client to the set of connections for this room
-                updateClient(ws, room); // send the new client the info they need
+                roomConnections[room].add(ws);
+                updateClient(ws, room);
             }
+        } catch (e) {
+            ws.terminate();
+            console.log(e);
         }
-        catch (e) {ws.terminate(); console.log(e);}
-    })
+    });
 
-    // runs when a client disconnects
-    ws.on('close', () => 
-    {
-        if (room !== null)
-        {
-            if (roomConnections[room] !== undefined)
-            {
-                roomConnections[room].delete(ws); // remove the client socket
-                if (roomConnections[room].size === 0) // delete the set of connections if there are none
-                {
-                    delete roomConnections[room];
-                }
+    ws.on('close', () => {
+        if (room && roomConnections[room]) {
+            roomConnections[room].delete(ws);
+            if (roomConnections[room].size === 0) {
+                delete roomConnections[room];
             }
         }
-    }); 
+    });
+});
+
+// Register error event handler ONCE (outside of `wss.on('connection')`)
+wss.on('error', (err) => {
+    console.error('WebSocket error:', err);
 });
 
 
@@ -527,6 +592,7 @@ app.post("/rooms", (req, res) =>{
                 }
                 else if (newRoom === null) // delete an old room
                 {
+                    console.log("Attempting to delete a room...");
                     FileSystem.rmSync("files/" + oldRoom, {recursive: true, force: true});
                     delete scheduleMap[oldRoom];
                     for (ws in roomConnections[oldRoom])

@@ -10,11 +10,11 @@ function HomePage()
     const [rooms, setRooms] = useState([]); // the rooms with their own layout, schedules, calendar, etc.
 
     const [selection, setSelection] = useState(null); // the name of the currently selected room
-    const [tempName, setTempName] = useState(""); // the in edit name of the currenlty selected room
+    const [tempName, setTempName] = useState(""); // the in edit name of the currently selected room
     const [overlay, setOverlay] = useState(false); // is the overlay visible
     
-    const baseURL = "http://"+window.location.hostname+":8500/"; // This will likely need to be changed for a production build
-
+    //const baseURL = "http://"+window.location.hostname+":8500/"; // This will likely need to be changed for a production build
+    const baseURL = "https://clock.redhawks.us:8000/";
 
     // TODO: and authorization header can be used to make sure that this user has admin credentials
     function updateServerRooms(info) // Sends the room changes to the server 

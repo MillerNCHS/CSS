@@ -30,5 +30,30 @@
     { "name": "Period 7", "start": "13:24", "end": "14:14" },
     { "name": "Period 8", "start": "14:20", "end": "15:10" }
   ],
-  "testing": [{ "name": "test Period", "start": "00:00", "end": "23:30" }]
+  "Assembly": [
+    { "name": "Period 1", "start": "07:45", "end": "08:35" },
+    { "name": "Period 2", "start": "08:40", "end": "09:22" },
+    { "name": "Period 3", "start": "09:27", "end": "10:09" },
+    { "name": "Period 4", "start": "10:14", "end": "10:56" },
+    { "name": "Period 5", "start": "11:01", "end": "11:43" },
+    { "name": "Period 6", "start": "11:48", "end": "12:30" },
+    { "name": "Period 7 (Junior/Senior Assembly)", "start": "12:40", "end": "13:27" },
+    { "name": "Period 7 (Freshman/Sophomore Assembly)", "start": "13:36", "end": "14:23" },
+    { "name": "Period 8", "start": "14:28", "end": "15:10" }
+  ],
+  "Finals Day 1": [
+    { "name": "Period 1 Final Exam", "start": "07:45", "end": "09:25" },
+    { "name": "Period 2 Final Exam", "start": "09:35", "end": "11:15" },
+    { "name": "Period 6 Final Exam", "start": "11:25", "end": "13:05" }
+  ],
+  "Finals Day 2": [
+    { "name": "Period 8 Final Exam", "start": "07:45", "end": "09:25" },
+    { "name": "Period 3 Final Exam", "start": "09:35", "end": "11:15" },
+    { "name": "Period 4 Final Exam", "start": "11:25", "end": "13:05" }
+  ],
+  "Finals Day 3": [
+    { "name": "Period 7 Final Exam", "start": "07:45", "end": "09:25" },
+    { "name": "Period 5 Final Exam", "start": "09:35", "end": "11:15" },
+    { "name": "Make Up Period", "start": "11:25", "end": "13:05" }
+  ]
 }

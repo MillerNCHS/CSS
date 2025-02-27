@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "This is the backend that will store the scheduals and interface with \"admin\" and \"client\"",
+  "description": "This is the backend that will store the schedules and interface with \"admin\" and \"client\"",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

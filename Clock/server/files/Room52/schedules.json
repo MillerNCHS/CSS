@@ -5,30 +5,55 @@
     { "name": "SOAR", "start": "09:25", "end": "10:10" },
     { "name": "Period 3", "start": "10:15", "end": "11:00" },
     { "name": "Period 4: AP Computer Science", "start": "11:05", "end": "11:50" },
-    { "name": "Period 5: Computer Programming 1", "start": "11:55", "end": "12:40" },
-    { "name": "Period 6: Computer Programming 1", "start": "12:45", "end": "13:30" },
+    { "name": "Period 5: Computer Programming 2", "start": "11:55", "end": "12:40" },
+    { "name": "Period 6: Computer Programming 2", "start": "12:45", "end": "13:30" },
     { "name": "Period 7: Software Engineering", "start": "13:35", "end": "14:20" },
-    { "name": "Period 8: Computer Programming 1", "start": "14:25", "end": "15:10" }
+    { "name": "Period 8: Computer Programming 2", "start": "14:25", "end": "15:10" }
   ],
   "Late Start": [
     { "name": "Period 1: AP Computer Science", "start": "09:00", "end": "09:42" },
     { "name": "Period 2: AP Computer Science", "start": "09:47", "end": "10:29" },
     { "name": "Period 3", "start": "10:34", "end": "11:16" },
     { "name": "Period 4: AP Computer Science", "start": "11:21", "end": "12:03" },
-    { "name": "Period 5: Computer Programming 1", "start": "12:08", "end": "12:49" },
-    { "name": "Period 6: Computer Programming 1", "start": "12:54", "end": "13:36" },
+    { "name": "Period 5: Computer Programming 2", "start": "12:08", "end": "12:49" },
+    { "name": "Period 6: Computer Programming 2", "start": "12:54", "end": "13:36" },
     { "name": "Period 7: Software Engineering", "start": "13:41", "end": "14:23" },
-    { "name": "Period 8: Computer Programming 1", "start": "14:28", "end": "15:10" }
+    { "name": "Period 8: Computer Programming 2", "start": "14:28", "end": "15:10" }
   ],
   "Main": [
     { "name": "Period 1: AP Computer Science", "start": "07:45", "end": "08:35" },
     { "name": "Period 2: AP Computer Science", "start": "08:41", "end": "09:34" },
     { "name": "Period 3", "start": "09:40", "end": "10:30" },
     { "name": "Period 4: AP Computer Science", "start": "10:36", "end": "11:26" },
-    { "name": "Period 5: Computer Programming 1", "start": "11:32", "end": "12:22" },
-    { "name": "Period 6: Computer Programming 1", "start": "12:28", "end": "13:18" },
+    { "name": "Period 5: Computer Programming 2", "start": "11:32", "end": "12:22" },
+    { "name": "Period 6: Computer Programming 2", "start": "12:28", "end": "13:18" },
     { "name": "Period 7: Software Engineering", "start": "13:24", "end": "14:14" },
-    { "name": "Period 8: Computer Programming 1", "start": "14:20", "end": "15:10" }
+    { "name": "Period 8: Computer Programming 2", "start": "14:20", "end": "15:10" }
   ],
-  "testing": [{ "name": "test Period", "start": "00:00", "end": "23:30" }]
+  "Assembly": [
+    { "name": "Period 1: AP Computer Science", "start": "07:45", "end": "08:35" },
+    { "name": "Period 2: AP Computer Science", "start": "08:40", "end": "09:22" },
+    { "name": "Period 3", "start": "09:27", "end": "10:09" },
+    { "name": "Period 4: AP Computer Science", "start": "10:14", "end": "10:56" },
+    { "name": "Period 5: Computer Programming 2", "start": "11:01", "end": "11:43" },
+    { "name": "Period 6: Computer Programming 2", "start": "11:48", "end": "12:30" },
+    { "name": "Winter Assembly", "start": "12:40", "end": "13:27" },
+    { "name": "Period 7: Software Engineering", "start": "13:36", "end": "14:23" },
+    { "name": "Period 8: Computer Programming 2", "start": "14:28", "end": "15:10" }
+  ],
+  "Finals Day 1": [
+    { "name": "Period 1: AP Computer Science Final Exam", "start": "07:45", "end": "09:25" },
+    { "name": "Period 2: AP Computer Science Final Exam", "start": "09:35", "end": "11:15" },
+    { "name": "Period 6: Computer Programming 1 Final Exam", "start": "11:25", "end": "13:05" }
+  ],
+  "Finals Day 2": [
+    { "name": "Period 8: Computer Programming 1 Final Exam", "start": "07:45", "end": "09:25" },
+    { "name": "Period 3 Final Exam", "start": "09:35", "end": "11:15" },
+    { "name": "Period 4: AP Computer Science Final Exam", "start": "11:25", "end": "13:05" }
+  ],
+  "Finals Day 3": [
+    { "name": "Period 7: Software Engineering Final Exam", "start": "07:45", "end": "09:25" },
+    { "name": "Period 5: Computer Programming 1 Final Exam", "start": "09:35", "end": "11:15" },
+    { "name": "Make Up Period", "start": "11:25", "end": "13:05" }
+  ]
 }
